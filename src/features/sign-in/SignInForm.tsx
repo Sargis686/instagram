@@ -16,9 +16,8 @@ import { useRouter } from 'next/router'
 export const SignInForm = () => {
   const { t } = useTranslation()
   const router = useRouter()
-
   const { control, errors, handleSubmit } = useSignInForm()
-  const [signIn, { isSuccess }] = useSignInMutation()
+  const [signIn, { isError }] = useSignInMutation()
   const [getMe] = useLazyMeQuery()
   const { refetch } = useMeQuery()
 
@@ -52,14 +51,9 @@ export const SignInForm = () => {
           return
         }
         refetch()
-
-        // void router.replace(`/profile/${userId}`)
+        void router.replace(`/profile/${userId}`)
       })
       .catch()
-  }
-
-  if (isSuccess) {
-    void router.push('/')
   }
 
   return (
@@ -79,7 +73,7 @@ export const SignInForm = () => {
             render={({ field }) => (
               <Input
                 {...field}
-                error={errors.email?.message}
+                error={isError ? t.auth.incorrectPassword : errors.email?.message}
                 fullWidth
                 label={t.auth.email}
                 placeholder={t.auth.emailPlaceholder}
@@ -92,7 +86,7 @@ export const SignInForm = () => {
             render={({ field }) => (
               <Input
                 {...field}
-                error={errors.password?.message}
+                error={isError ? t.auth.incorrectPassword : errors.password?.message}
                 fullWidth
                 label={t.auth.password}
                 type="password"
@@ -108,9 +102,11 @@ export const SignInForm = () => {
             {t.auth.signIn}
           </Button>
           <span className="text-regular-16 pt-[18px] pb-[6px]">{t.auth.dontHaveAnAccount}</span>
-          <Button className="text-h3" variant="text">
-            {t.auth.signUp}
-          </Button>
+          <Link href="/sign-up">
+            <Button className="text-h3" variant="text">
+              {t.auth.signUp}
+            </Button>
+          </Link>
         </div>
       </Card>
     </form>
