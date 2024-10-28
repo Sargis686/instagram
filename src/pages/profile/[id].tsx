@@ -15,23 +15,29 @@ import Link from 'next/link'
 
 const Profile = () => {
   const { data: me } = useMeQuery()
-  const { data: profileInfo } = useGetProfileInfoQuery()
 
+  //profileInfo will hold the actual profile data returned by the API, making it available to use throughout your component.
+  // { data: profileInfo } is destructuring the result of useGetProfileInfoQuery() to pull out the data property.
+
+  const { data: profileInfo } = useGetProfileInfoQuery()
   const params: GetProfilePostsParams = {
     userName: me?.userName!,
   }
+
   const { t } = useTranslation()
+
   const { data: posts } = useGetPostsQuery(params)
   const { data: followers } = useGetFollowersQuery(profileInfo?.userName!)
   const { data: following } = useGetFollowingQuery(profileInfo?.userName!)
 
-  const profileName = `${profileInfo?.firstName} ${profileInfo?.lastName}`
+  const profileName = `${profileInfo?.firstName} ${profileInfo?.lastName}`.trim();
   const isProfileOwner = me?.userId === profileInfo?.id
 
   return (
     <div className="flex flex-col gap-[13px] flex-1 pt-[24px] px-[15px] md:pr-16 md:pl-6 md:pt-[35px] w-full">
       <div className="flex flex-row">
         <div className=" hidden md:block min-w-40">
+          {/* nkary profile-i u profileName u paymany yst vori kereva  */}
           <Avatar
             name={profileName}
             round
@@ -74,7 +80,7 @@ const Profile = () => {
             dangerouslySetInnerHTML={{
               __html: (profileInfo?.aboutMe || '').replace(/\n\r?/g, '<br/>'),
             }}
-          />
+          /> 
         </div>
       </div>
       <div className={'block md:hidden'}>
