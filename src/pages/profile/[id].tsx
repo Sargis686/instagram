@@ -30,7 +30,13 @@ const Profile = () => {
   const { data: followers } = useGetFollowersQuery(profileInfo?.userName!)
   const { data: following } = useGetFollowingQuery(profileInfo?.userName!)
 
-  const profileName = `${profileInfo?.firstName} ${profileInfo?.lastName}`.trim();
+
+  const profileName = profileInfo?.firstName && profileInfo?.lastName
+    ? `${profileInfo.firstName} ${profileInfo.lastName}`.trim()
+    : profileInfo?.userName || 'user' // fallback to profile URL if names are missing 
+    
+    
+
   const isProfileOwner = me?.userId === profileInfo?.id
 
   return (
@@ -47,7 +53,16 @@ const Profile = () => {
         </div>
         <div className="flex gap-1.5 flex-col md:hidden w-full">
           <Avatar name={profileName} round size="72px" src={profileInfo?.avatars?.[0]?.url || ''} />
-          <span className="text-bold-16 md:hidden">{profileName}</span>
+          <span className="text-bold-16 md:hidden">  {profileInfo?.firstName && profileInfo?.lastName ? (
+            profileName
+          ) : (
+            <Link href={`/profile/${profileInfo?.userName || 'user'}`}>{profileName}</Link>
+          )}
+          
+          
+          
+          
+          </span>
         </div>
 
         <div className="w-full pl-[7px] md:pl-9 flex flex-col">
@@ -80,11 +95,11 @@ const Profile = () => {
             dangerouslySetInnerHTML={{
               __html: (profileInfo?.aboutMe || '').replace(/\n\r?/g, '<br/>'),
             }}
-          /> 
+          />
         </div>
       </div>
       <div className={'block md:hidden'}>
-        <span className={'block md:hidden'}>{profileInfo?.aboutMe}</span>
+        {/* <span className={'block md:hidden'}>{profileInfo?.aboutMe}</span> */}
       </div>
     </div>
   )
