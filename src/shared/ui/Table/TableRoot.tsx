@@ -56,6 +56,7 @@ export const HeadCell = (props: HeadCellProps) => {
 }
 
 const TableHeader = ({ columns, onSort, sort, ...res }: HeadProps) => {
+
   const handleSort = (key: string, sortable?: boolean) => () => {
     if (!onSort || !sortable) {
       return

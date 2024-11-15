@@ -76,7 +76,7 @@ export const SideBar = () => {
           title={t.sidebar.create}
         ></CustomLink>
         <CustomLink
-          activeLink={activeLink}
+          activeLink={activeLink} 
           alt={t.sidebar.message}
           child1={<Message />}
           child2={<MessageFill />}
